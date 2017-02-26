@@ -7,7 +7,8 @@
       var id = this.id,
           $this = $(this),
           $text = $('#' + id + '_text'),
-          $deck = $('#' + id + '_on_deck');
+          $deck = $('#' + id + '_on_deck'),
+          $selected = $('input[id="' + id + '_selected"]').hide();
 
       function receiveResult(event, ui) {
         if ($this.val()) {
@@ -17,6 +18,8 @@
         $text.val('');
         addKiller(ui.item.repr, ui.item.pk);
         $deck.trigger('added', [ui.item.pk, ui.item]);
+        $selected.val(ui.item.repr)
+
         $this.trigger('change');
 
         return false;
@@ -39,6 +42,7 @@
 
       function kill() {
         $this.val('');
+        $selected.val('');
         $deck.children().fadeOut(1.0).remove();
       }
 
@@ -72,7 +76,8 @@
       var id = this.id,
           $this = $(this),
           $text = $('#' + id + '_text'),
-          $deck = $('#' + id + '_on_deck');
+          $deck = $('#' + id + '_on_deck'),
+          $selected = $('input[id="' + id + '_selected"]').hide();
 
       function receiveResult(event, ui) {
         var pk = ui.item.pk,
@@ -82,6 +87,11 @@
           $this.val((prev ? prev : '|') + pk + '|');
           addKiller(ui.item.repr, pk);
           $text.val('');
+
+          $selected.val(ui.item.repr)
+          $selected.trigger('added', [ui.item.pk, ui.item])
+          $selected.trigger('change')
+
           $deck.trigger('added', [ui.item.pk, ui.item]);
           $this.trigger('change');
         }
